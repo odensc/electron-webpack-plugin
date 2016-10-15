@@ -1,6 +1,6 @@
 {
   "name": "electron-webpack-plugin",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Webpack plugin to launch Electron.",
   "main": "lib/index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/thesbros/electron-webpack-plugin#readme",
   "peerDependencies": {
-	  "electron": "*"
+    "electron": "*"
   },
   "devDependencies": {
     "babel-cli": "^6.16.0",
