@@ -1,0 +1,11 @@
+# Node
+node_modules
+
+# Editors
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+
+# Misc
+lib
+*.log
