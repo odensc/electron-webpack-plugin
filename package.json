@@ -16,6 +16,14 @@
   "bugs": {
     "url": "https://github.com/thesbros/electron-webpack-plugin/issues"
   },
+  "keywords": [
+	"electron",
+	"webpack",
+	"plugin",
+	"relaunch",
+	"run",
+	"webpack-plugin"
+  ],
   "homepage": "https://github.com/thesbros/electron-webpack-plugin#readme",
   "peerDependencies": {
     "electron": "*"
