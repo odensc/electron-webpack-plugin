@@ -67,3 +67,13 @@ devServer: {
     outputPath: "./output"
 }
 ```
+
+You will also need to add the dev server client to your renderer entry point:
+```js
+"renderer/index": [
+    require.resolve("webpack-dev-server/client/") + "?http://localhost:3000",
+    "./src/scripts/renderer/index.js"
+]
+```
+
+(replace `http://localhost:3000` with whatever your dev server URL is)
