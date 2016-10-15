@@ -6,6 +6,7 @@ export default class ElectronPlugin
 {
 	constructor(options)
 	{
+		this.hashIndex = {};
 		// default to empty object
 		this.options = options || {};
 		// make sure relaunchPathMatch was given
@@ -29,7 +30,7 @@ export default class ElectronPlugin
 		this.options.options.stdio = this.options.options.stdio || "inherit";
 	}
 
-	launch(cb)
+	launch()
 	{
 		// if electron is open, kill
 		if (this.child)
@@ -43,28 +44,34 @@ export default class ElectronPlugin
 			this.options.args.concat(this.options.path),
 			this.options.options
 		);
-		cb();
 	}
 
 	apply(compiler)
 	{
-		// when we get a compilation
-		compiler.plugin("compilation", compilation => {
-			// when a module is built
-			compilation.plugin("succeed-module", module => {
-				// if it is in relaunch path
-				if (module.request
-					&& resolve(module.request).indexOf(this.options.relaunchPathMatch) > -1)
-				{
-					// we should relaunch after emit
-					this.shouldRelaunch = true;
-				}
-			});
-		});
+		// when compilation is done
+		compiler.plugin("done", stats => {
+			let shouldRelaunch = false;
+			stats.compilation.modules.every(module => {
+				if (!module.resource) return true;
 
-		// when files are emitted
-		compiler.plugin("after-emit", (compilation, cb) => {
-			if (this.shouldRelaunch) this.launch(cb);
+				// resolve absolute path
+				const path = resolve(module.resource);
+				// get hash
+				const hash = module._cachedSource.hash;
+				// if in relaunch path and hash is different
+				if (path.indexOf(this.options.relaunchPathMatch) > -1
+					&& this.hashIndex[path] !== hash)
+				{
+					shouldRelaunch = true;
+				}
+
+				// update hash in index
+				this.hashIndex[path] = hash;
+				// keep going, or stop
+				return !shouldRelaunch;
+			});
+
+			if (shouldRelaunch) this.launch();
 		});
 	}
 }

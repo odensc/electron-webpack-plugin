@@ -1,5 +1,7 @@
 # electron-webpack-plugin
 
+![NPM Badge](https://img.shields.io/npm/v/electron-webpack-plugin.png)
+
 Webpack plugin to restart Electron.
 
 Requires a peer dependency of `electron`.
