@@ -68,12 +68,15 @@ devServer: {
 }
 ```
 
-You will also need to add the dev server client to your renderer entry point:
+You will also need to add the dev server client to your renderer entry point,
+if it is not already:
 ```js
 "renderer/index": [
-    require.resolve("webpack-dev-server/client/") + "?http://localhost:3000",
+    "webpack-dev-server/client?http://localhost:3000",
     "./src/scripts/renderer/index.js"
 ]
 ```
+
+This will allow HMR/reloading with `inline: false`.
 
 (replace `http://localhost:3000` with whatever your dev server URL is)
