@@ -1,6 +1,6 @@
 {
   "name": "electron-webpack-plugin",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Webpack plugin to launch Electron.",
   "main": "lib/index.js",
   "scripts": {
@@ -17,12 +17,12 @@
     "url": "https://github.com/thesbros/electron-webpack-plugin/issues"
   },
   "keywords": [
-	"electron",
-	"webpack",
-	"plugin",
-	"relaunch",
-	"run",
-	"webpack-plugin"
+    "electron",
+    "webpack",
+    "plugin",
+    "relaunch",
+    "run",
+    "webpack-plugin"
   ],
   "homepage": "https://github.com/thesbros/electron-webpack-plugin#readme",
   "peerDependencies": {
