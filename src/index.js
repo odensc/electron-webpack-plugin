@@ -27,7 +27,6 @@ export default class ElectronPlugin
 		// defaults
 		this.options.args = this.options.args || [];
 		this.options.options = this.options.options || {};
-		this.options.options.cwd = this.options.options.cwd || this.options.path;
 		this.options.options.stdio = this.options.options.stdio || "inherit";
 	}
 
