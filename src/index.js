@@ -53,6 +53,7 @@ export default class ElectronPlugin
 			let shouldRelaunch = false;
 			stats.compilation.modules.every(module => {
 				if (!module.resource) return true;
+				if (!module._cachedSource) return true;
 
 				// resolve absolute path
 				const path = resolve(module.resource);
