@@ -7,23 +7,20 @@ export default class ElectronPlugin
 	constructor(options)
 	{
 		this.hashIndex = {};
-		// default to empty object
 		this.options = options || {};
-		// make sure relaunchPathMatch was given
-		if (!this.options.relaunchPathMatch)
+
+		if (!this.options.test || !(this.options.test instanceof RegExp))
 		{
-			throw new Error("webpack-electron-plugin: relaunchPathMatch is required");
+			throw new Error("webpack-electron-plugin: test is required, and must be a RegExp");
 		}
 
-		// make sure path was given
-		if (!this.options.path)
+		if (!this.options.path || typeof this.options.path !== "string")
 		{
-			throw new Error("webpack-electron-plugin: path is required");
+			throw new Error("webpack-electron-plugin: path is required, and must be a string");
 		}
 
-		// resolve to absolute path
-		this.options.relaunchPathMatch = resolve(this.options.relaunchPathMatch);
 		this.options.path = resolve(this.options.path);
+
 		// defaults
 		this.options.args = this.options.args || [];
 		this.options.options = this.options.options || {};
@@ -32,7 +29,7 @@ export default class ElectronPlugin
 
 	launch()
 	{
-		// if electron is open, kill
+		// if electron is open, kill it
 		if (this.child)
 		{
 			this.child.kill();
@@ -51,25 +48,24 @@ export default class ElectronPlugin
 		// when compilation is done
 		compiler.plugin("done", stats => {
 			let shouldRelaunch = false;
-			stats.compilation.modules.every(module => {
+			stats.compilation.modules.forEach(module => {
 				if (!module.resource) return true;
 				if (!module._cachedSource) return true;
 
-				// resolve absolute path
-				const path = resolve(module.resource);
 				// get hash
 				const hash = module._cachedSource.hash;
-				// if in relaunch path and hash is different
-				if (path.indexOf(this.options.relaunchPathMatch) > -1
-					&& this.hashIndex[path] !== hash)
+				const split = module.id.split("!");
+				// get last path in module id
+				const id = split[split.length - 1];
+				// if matches regex and hash is different
+				if (id.match(this.options.test)
+					&& this.hashIndex[module.resource] !== hash)
 				{
 					shouldRelaunch = true;
 				}
 
 				// update hash in index
-				this.hashIndex[path] = hash;
-				// keep going, or stop
-				return !shouldRelaunch;
+				this.hashIndex[module.resource] = hash;
 			});
 
 			if (shouldRelaunch) this.launch();
